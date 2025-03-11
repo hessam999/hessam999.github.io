@@ -14,54 +14,13 @@
 </head>
 
 <body>
-    <div class="container" >
+    <div class="container">
         <div class="row">
             <input type="datetime-local" id="_datetime">
 
             <input type="range" id="slider" min="-64800" max="64800" value="720">
             <br />
-            <script>
-                // JavaScript for sliding date and time selector
-                const slider = document.getElementById('slider');
-                const output = document.getElementById('output');
 
-                // Function to convert slider value to date and time
-                function updateDateTime(value) {
-                    const now = new Date();
-                    const minutesInDay = 1440; // 24 hours * 60 minutes
-                    const daysInYear = 365; // Approximate number of days in a year
-
-                    // Calculate the date and time based on the slider value
-                    const daysOffset = Math.floor(value / minutesInDay);
-                    const minutesOffset = value % minutesInDay;
-
-                    const date = new Date(now);
-                    date.setDate(now.getDate() + daysOffset);
-                    date.setHours(Math.floor(minutesOffset / 60));
-                    date.setMinutes(minutesOffset % 60);
-
-                    _datetime.value = formatDateTimeLocal(date);
-
-                    // Format the date and time
-                    const formattedDate = date.toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    });
-                    const formattedTime = date.toLocaleTimeString('en-US', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                }
-
-                // Initialize with the current date and time
-                updateDateTime(slider.value);
-
-                // Update the date and time when the slider is moved
-                slider.addEventListener('input', (e) => {
-                    updateDateTime(e.target.value);
-                });
-            </script>
         </div>
         <div class="row">
             <h1>Moon Sighting</h1>
@@ -80,10 +39,6 @@
             <div id="result"></div>
 
         </div>
-
-
-
-
         <div class="row">
             <h1>Click on the Map to Get Location</h1>
             <div id="map"></div>
@@ -114,23 +69,12 @@
             document.getElementById('longitude').textContent = lng.toFixed(6);
 
 
-            // Check moon visibility
-            const isMoonVisible = checkMoonVisibility(lat, lng, new Date(_datetime.value));
 
-            // Display the result
-            const resultDiv = document.getElementById('result');
-            if (isMoonVisible) {
-                resultDiv.textContent = "The moon is visible in your location! 🌙";
-                resultDiv.style.color = "green";
-            } else {
-                resultDiv.textContent = "The moon is not visible in your location. 🌑";
-                resultDiv.style.color = "red";
-            }
+            updateText(lat, lng, new Date(_datetime.value));
+
 
         });
-    </script>
 
-    <script>
         // Add form submission event listener
         document.getElementById('moonForm').addEventListener('submit', function (event) {
             event.preventDefault(); // Prevent form submission
@@ -138,20 +82,45 @@
             // Get latitude and longitude from the form
             const latitude = parseFloat(document.getElementById('tb_latitude').value);
             const longitude = parseFloat(document.getElementById('tb_longitude').value);
+            updateText(latitude, longitude, new Date(_datetime.value));
 
-            // Check moon visibility
-            const isMoonVisible = checkMoonVisibility(latitude, longitude, _datetime.value);
-
-            // Display the result
-            const resultDiv = document.getElementById('result');
-            if (isMoonVisible) {
-                resultDiv.textContent = "The moon is visible in your location! 🌙";
-                resultDiv.style.color = "green";
-            } else {
-                resultDiv.textContent = "The moon is not visible in your location. 🌑";
-                resultDiv.style.color = "red";
-            }
         });
+
+
+
+        // JavaScript for sliding date and time selector
+        const slider = document.getElementById('slider');
+        const output = document.getElementById('output');
+
+        // Function to convert slider value to date and time
+        function updateDateTime(value) {
+            const now = new Date();
+            const minutesInDay = 1440; // 24 hours * 60 minutes
+            const daysInYear = 365; // Approximate number of days in a year
+
+            // Calculate the date and time based on the slider value
+            const daysOffset = Math.floor(value / minutesInDay);
+            const minutesOffset = value % minutesInDay;
+
+            const date = new Date(now);
+            date.setDate(now.getDate() + daysOffset);
+            date.setHours(Math.floor(minutesOffset / 60));
+            date.setMinutes(minutesOffset % 60);
+
+            _datetime.value = formatDateTimeLocal(date);
+            updateText(tb_latitude.value, tb_longitude.value, new Date(_datetime.value));
+
+        }
+
+        // Initialize with the current date and time
+        updateDateTime(slider.value);
+
+        // Update the date and time when the slider is moved
+        slider.addEventListener('input', (e) => {
+            updateDateTime(e.target.value);
+        });
+
+
     </script>
 
 </body>

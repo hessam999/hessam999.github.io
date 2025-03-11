@@ -78,6 +78,22 @@ function formatDateTimeLocal(date) {
     return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
+function updateText(latitude, longitude, datetime) {
+    // Check moon visibility
+    const isMoonVisible = checkMoonVisibility(latitude, longitude, datetime);
+
+    // Display the result
+    const resultDiv = document.getElementById('result');
+    if (isMoonVisible) {
+        resultDiv.textContent = "The moon is visible in your location! 🌙";
+        resultDiv.style.color = "green";
+    } else {
+        resultDiv.textContent = "The moon is not visible in your location. 🌑";
+        resultDiv.style.color = "red";
+    }
+    return resultDiv;
+}
+
 // // Example usage
 // const latitude = 40.7128; // New York City latitude
 // const longitude = -74.0060; // New York City longitude
