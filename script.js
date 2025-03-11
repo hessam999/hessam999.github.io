@@ -63,7 +63,19 @@ function checkMoonVisibility(latitude, longitude, date = new Date()) {
     const isMoonHighEnough = moonAltitude >= 5; // Moon altitude >= 5 degrees
     const isElongationSufficient = elongation >= 8; // Elongation >= 8 degrees
 
+    console.log("moonAge:"+moonAge+" - moonAltitude:"+moonAltitude+" - elongation:"+elongation);
     return isMoonOldEnough && isMoonHighEnough && isElongationSufficient;
+}
+
+// Function to format a Date object into the required string format
+function formatDateTimeLocal(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
 // // Example usage
